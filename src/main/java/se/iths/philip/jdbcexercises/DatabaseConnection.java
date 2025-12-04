@@ -1,16 +1,13 @@
-package se.iths.philip.jdbcexercises.view;
+package se.iths.philip.jdbcexercises;
 
-import java.io.InputStream;
-import java.util.Properties;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseConnection {
     private static DatabaseConnection instance;
-    private String url;
-    private String user;
-    private String password;
 
     private DatabaseConnection() {
-        loadProperties();
     }
 
     public static DatabaseConnection getInstance() {
@@ -20,9 +17,12 @@ public class DatabaseConnection {
         return instance;
     }
 
-    private void loadProperties() {
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("application.properties")) {
-            Properties props =
-        }
+    public Connection getConnection() throws SQLException {
+        AppInfo appInfo = AppInfo.getInstance();
+        String url = appInfo.getProperties("db.urlMydb");
+        String user = appInfo.getProperties("db.userRoot");
+        String pass = appInfo.getProperties("db.pass1");
+
+        return DriverManager.getConnection(url, user, pass);
     }
 }

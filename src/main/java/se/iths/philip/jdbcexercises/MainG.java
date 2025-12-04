@@ -2,15 +2,16 @@ package se.iths.philip.jdbcexercises;
 
 import java.sql.*;
 
-public class Main {
+public class MainG {
     public static void main(String[] args) throws SQLException {
-        AppInfo appInfo = AppInfo.getInstance();
-        String url = appInfo.getProperties("db.urlMydb");
-        String user = appInfo.getProperties("db.userRoot");
-        String pass = appInfo.getProperties("db.pass1");
+        String url = "jdbc:mysql://localhost:3306/my_database";
+        String user = "root";
+        String pass = "Ph!Wilhelm1";
 
-
-        String sql = "UPDATE person SET income = ? WHERE person_id = ?";
+//        String sql = "SELECT * FROM person";
+        String sql = "SELECT * FROM person WHERE income > ? AND dob > ?";
+//        String sql = "INSERT INTO person (first_name, last_name, dob, income) VALUES (?, ?, ?, ?)";
+//        String sql = "UPDATE person SET income = ? WHERE person_id = ?";
 //        String sql = "DELETE FROM person WHERE person_id = ?";
 
         try (Connection conn = DriverManager.getConnection(url, user, pass);
@@ -23,25 +24,30 @@ public class Main {
             System.out.println("- Driver: " + meta.getDriverName());
             System.out.println("- URL: " + meta.getURL());
 
-//            pstmt.setDouble(1, 30000.0);
-//            pstmt.setDate(2, java.sql.Date.valueOf("1990-01-01"));
+            // Select - Visar alla personer med income högre än x & dob efter s.
+            pstmt.setDouble(1, 30000.0);
+            pstmt.setDate(2, java.sql.Date.valueOf("1990-01-01"));
 
-//            pstmt.setString(1, "Lisa");
-//            pstmt.setString(2, "Andersson");
-//            pstmt.setDate(3, java.sql.Date.valueOf("1995-05-10"));
-//            pstmt.setDouble(4, 42000.0);
-//            int rowsInserted = pstmt.executeUpdate();
-//            System.out.println("Antal rader infogade: " + rowsInserted);
+            // Insert - Lägger in ny person in i tabellen.
+            pstmt.setString(1, "Lisa");
+            pstmt.setString(2, "Andersson");
+            pstmt.setDate(3, java.sql.Date.valueOf("1995-05-10"));
+            pstmt.setDouble(4, 42000.0);
+            int rowsInserted = pstmt.executeUpdate();
+            System.out.println("Antal rader infogade: " + rowsInserted);
 
-//            pstmt.setDouble(1, 50000.0);
-//            pstmt.setInt(2, 3);
-//            int rowsUpdated = pstmt.executeUpdate();
-//            System.out.println("Antal rader uppdaterade: " + rowsUpdated);
+            // Update - Ändrar i enns income värde genom Person ID
+            pstmt.setDouble(1, 50000.0);
+            pstmt.setInt(2, 3);
+            int rowsUpdated = pstmt.executeUpdate();
+            System.out.println("Antal rader uppdaterade: " + rowsUpdated);
 
-//            pstmt.setInt(1, 8);
-//            int rowsDeleted = pstmt.executeUpdate();
-//            System.out.println("Antal rader borttagne: " + rowsDeleted);
+            // Delete - Tar bort en person från tabellen med ID.
+            pstmt.setInt(1, 9);
+            int rowsDeleted = pstmt.executeUpdate();
+            System.out.println("Antal rader borttagne: " + rowsDeleted);
 
+            // Select - Visar alla person i tabellen & alla värden i tabellen.
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int id = rs.getInt("person_id");

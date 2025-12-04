@@ -1,7 +1,7 @@
-package se.iths.philip.jdbcexercises.view;
+package se.iths.philip.jdbcexercises;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class AppInfo {
@@ -10,8 +10,8 @@ public class AppInfo {
 
     private AppInfo() {
         properties = new Properties();
-        try (FileReader reader = new FileReader("application.properties")) {
-            properties.load(reader);
+        try (InputStream input = ClassLoader.getSystemResourceAsStream("application.properties")) {
+            properties.load(input);
         } catch (IOException e) {
             e.printStackTrace();
         }
